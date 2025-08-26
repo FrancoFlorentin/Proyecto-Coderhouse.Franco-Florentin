@@ -5,8 +5,8 @@ const router = Router();
 
 router.get('/', async (req, res, next) => {
   try {
-    const users = await productManager.getProducts();
-    res.status(200).json(users);
+    const products = await productManager.getProducts();
+    res.status(200).json(products);
   } catch (error) {
     next(error);
   }
@@ -23,8 +23,11 @@ router.get('/:pid', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
+  const io = req.app.get("io");
   try {
-    res.status(201).json(await productManager.createProduct(req.body))
+    const newProduct = await productManager.createProduct(req.body)
+    io.emit('newProduct', newProduct)
+    res.status(201).json({message: "Producto creado correctamente"})
   } catch (error) {
     next(error)
   }
@@ -40,9 +43,12 @@ router.put("/:pid", async (req, res, next) => {
 })
 
 router.delete("/:pid", async (req, res, next) => {
+  const io = req.app.get("io");
   try {
     const { pid } = req.params
-    res.json(await productManager.deleteProduct(pid))
+    await productManager.deleteProduct(pid)
+    io.emit('deleteProduct', pid)
+    res.status(200).json({message: "Producto eliminado correctamente"})
   } catch (error) {
     next(error)
   }

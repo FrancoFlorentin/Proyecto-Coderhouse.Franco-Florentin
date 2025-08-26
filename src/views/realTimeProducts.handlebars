@@ -1,0 +1,112 @@
+<h1 class="text-center py-5 text-4xl uppercase font-bold text-gray-600">Productos en tiempo real</h1>
+<a 
+  href="/" 
+  class="block size-fit mx-auto text-xl text-gray-500 font-semibold hover:text-amber-700 transition-colors mb-5"
+>Ir al inicio</a>
+
+<div class="w-[90%] h-[calc(100vh)] flex mx-auto bg-white shadow-lg p-5 mb-10" >
+
+  <div class="w-full flex-1 overflow-y-scroll space-y-5 py-5" id="products-list">
+  </div>
+  <form 
+    class="max-w-[450px] w-[400px]  flex flex-col p-5 rounded-md  space-y-5 my-auto"
+    id="product-form"
+  > 
+    <label class="text-xl text-center uppercase font-bold text-amber-700">Nuevo Producto</label>
+    <div class="flex flex-col">
+      <label for="title" class="text-gray-500 uppercase font-bold">Título</label>
+      <input 
+        type="text" 
+        name="title" 
+        id="title"
+        required
+        class="bg-gray-100 rounded-md px-3 py-2 focus:outline-none text-gray-500 font-bold"
+      >
+            
+    </div>
+
+    <div class="flex flex-col">
+      <label for="description" class="text-gray-500 uppercase font-bold">Descripción</label>
+      <textarea 
+        name="description" 
+        id="description"
+        required
+        name="description"
+        class="bg-gray-100 rounded-md px-3 py-2 focus:outline-none text-gray-500 font-bold resize-none"
+      ></textarea>
+    </div>
+
+    <div class="flex flex-col">
+      <label for="code" class="text-gray-500 uppercase font-bold" >Código del producto</label>
+      <input 
+        type="text" 
+        name="code" 
+        required
+        id="code"
+        class="bg-gray-100 rounded-md px-3 py-2 focus:outline-none text-gray-500 font-bold"
+      >
+    </div>
+
+    <div class="flex gap-2 justify-between">
+      <div class="">
+        <label for="price" class="text-gray-500 uppercase font-bold">Precio</label>
+        <div class="flex items-center gap-2">
+          <p class="text-gray-500 uppercase font-bold text-xl">$</p>
+          <input 
+            type="number"
+            min="1" 
+            name="price"
+            required
+            id="price"
+            class="bg-gray-100 rounded-md px-3 py-2 w-24 focus:outline-none text-gray-500 font-bold"
+          >
+
+        </div>
+      </div>
+      <div class="flex flex-col">
+        <label for="stock" class="text-gray-500 uppercase font-bold">Stock</label>
+        <input 
+          type="number"
+          min="1" 
+          name="stock"
+          id="stock"
+          required
+          class="bg-gray-100 rounded-md px-3 py-2 w-20 focus:outline-none text-gray-500 font-bold"
+        >
+      </div>
+
+      <div class="flex flex-col">
+        <label for="status" class="text-gray-500 uppercase font-bold">Estado</label>
+        <input 
+          type="checkbox" 
+          id="status"
+          class="my-auto" 
+          checked
+        >
+      </div>
+
+    </div>
+
+    <div class="flex flex-col">
+      <label for="category" class="text-gray-500 uppercase font-bold">Categoría</label>
+      <select 
+        name="category" 
+        id="category"
+        class="bg-gray-100  rounded-md px-3 py-2 focus:outline-none text-gray-500 font-bold"
+      >
+        <option value="Remeras">Remeras</option>
+        <option value="Pantalones">Pantalones</option>
+        <option value="Sweaters">Sweaters</option>
+      </select>
+    </div>
+
+    <input 
+      type="submit"
+      value="Crear Producto"
+      class="uppercase font-bold bg-gray-600 text-white py-2 rounded-md cursor-pointer hover:bg-gray-700 transition-colors"
+    >
+  </form>
+
+</div>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

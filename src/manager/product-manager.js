@@ -8,7 +8,8 @@ class ProductManager {
   async getProducts() {
     if (fs.existsSync(this.path)) {
       const products = await fs.promises.readFile(this.path, "utf-8")
-      return JSON.parse(products)
+      const productsOrdered = JSON.parse(products).sort((a, b) => b.id - a.id)
+      return productsOrdered
     } return []
   }
   
@@ -33,9 +34,9 @@ class ProductManager {
       // Generando Id autoincrementable
       const products = await this.getProducts()
       let id = 1
+      let maxId = 0
       if (products.length) {
         for (const product of products) {
-          let maxId = 1
           if (product.id > maxId) {
             maxId = product.id
           }
@@ -51,7 +52,7 @@ class ProductManager {
 
       products.push(newProduct)
       await fs.promises.writeFile(this.path, JSON.stringify(products));
-      return "Producto creado correctamente"
+      return newProduct
     } catch (error) {
       throw error
     }
