@@ -3,11 +3,49 @@
 <a 
   href="/realtimeproducts" 
   class="block size-fit mx-auto text-xl text-gray-500 font-semibold hover:text-amber-700 transition-colors pb-10"
->Agregar más</a>
+>Crear productos</a>
 
-<div 
-  class="w-[90%] mx-auto flex flex-wrap gap-16 justify-center mb-20" 
-  id="products-box"
->
+<div class="mb-5 p-4 bg-gray-100 rounded border-1 border-gray-300 flex gap-4 items-center w-fit mx-auto">
+  <form id="filterForm" class="flex gap-4">
+    <select name="query" id="query" class="border px-2 py-1 rounded">
+      <option value="">Sin filtro</option>
+      {{!-- Categoría --}}
+      <option value="Remeras">Remeras</option>
+      <option value="Pantalones">Pantalones</option>
+      <option value="Sweaters">Sweaters</option>
+      {{!-- Disponibilidad --}}
+      <option value="true">Disponibles</option>
+      <option value="false">No disponibles</option>
+    </select>
 
+    {{!-- Ordenamiento --}}
+    <select name="sort" id="sort" class="border px-2 py-1 rounded">
+      <option value="">Sin orden</option>
+      <option value="asc">Precio ascendente</option>
+      <option value="desc">Precio descendente</option>
+    </select>
+
+    {{!-- Limite --}}
+    <input 
+      type="number"
+      name="limit"
+      id="limit"
+      min="1"
+      class="border rounded py-1 px-2 "
+      placeholder="Límite por página"
+    >
+
+    <button type="submit" class="bg-slate-600 text-white px-3 py-1 rounded hover:bg-slate-700 transition-colors cursor-pointer">
+      Filtrar
+    </button>
+  </form>
 </div>
+
+<div class="min-h-[600px] w-full">
+  <div 
+    class="w-[90%] mx-auto flex flex-wrap gap-16 justify-center mb-20" 
+    id="products-box"
+  ></div>
+  <div id="pagination-container" class="flex justify-center gap-2 mb-20"></div>
+</div>
+

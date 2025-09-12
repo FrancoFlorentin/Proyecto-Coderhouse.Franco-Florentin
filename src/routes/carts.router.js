@@ -1,33 +1,18 @@
 import { Router } from 'express';
-import { cartManager } from '../manager/cart-manager.js';
+import { cartController } from '../controllers/cart.controller.js';
 
 const router = Router();
 
-router.post('/', async (req, res, next) => {
-  try {
-    res.status(201).json(await cartManager.createCart(req.body))
-  } catch (error) {
-    next(error)
-  }
-})
+router.post('/', cartController.createCart)
 
-router.get('/:cid', async (req, res, next) => {
-  try {
-    const { cid } = req.params
-    const products = await cartManager.getProductsByCartId(cid)
-    res.status(200).json(products)
-  } catch (error) {
-    next(error)
-  }
-})
+router.get('/:cid', cartController.findCartById)
 
-router.post('/:cid/product/:pid', async (req, res, next) => {
-  try {
-    const { cid, pid } = req.params
-    res.status(200).json(await cartManager.saveProductToCart(cid, pid))
-  } catch (error) {
-    next(error)
-  }
-})
+router.put('/:cid', cartController.updateCart)
+
+router.post('/:cid/products/:pid', cartController.addProductToCart)
+
+router.delete('/:cid/products/:pid', cartController.removeProductFromCart)
+
+router.delete("/clear/:cid", cartController.clearCart); 
 
 export default router

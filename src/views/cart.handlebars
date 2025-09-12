@@ -1,0 +1,36 @@
+<h1 class="text-center py-5 text-4xl uppercase font-bold text-gray-600">Carrito</h1>
+
+<a 
+  href="/" 
+  class="block size-fit mx-auto text-xl text-gray-500 font-semibold hover:text-amber-700 transition-colors mb-5"
+>Ir al inicio</a>
+
+<div class="w-full h-[600px]">
+  <div class="flex p-5 mx-auto w-fit flex-col bg-white shadow-lg rounded-md">
+    {{#if cart.products.length}}
+      
+      <ul class="space-y-3">
+        {{#each cart.products}}
+          <li class="flex border-1 border-gray-200 shadow rounded">
+            <p class="w-80 py-3 px-2 border-r-1 border-gray-200 text-gray-700 font-semibold truncate">{{this.product.title}}</p>
+            <p class="w-28 py-3 px-2 border-r-1 border-gray-200 text-gray-600">${{this.product.price}}</p>
+            <p class="w-28 py-3 px-2 border-r-1 border-gray-200 text-gray-600">Cantidad: {{this.quantity}}</p>
+            <button
+              class="px-5 text-red-500 font-bold hover:text-red-700 cursor-pointer transition-colors"
+              id="product-cart-button"
+              data-product-id="{{this.product._id}}"
+              data-cart-id="{{../cart._id}}"
+            >Eliminar</button>
+          </li>
+        {{/each}}
+      </ul>
+      <button
+        class="mt-5 px-5 py-2 bg-red-600 text-white hover:bg-red-800 rounded transition-colors cursor-pointer"
+        data-id={{cart._id}}
+        id="clear-cart-button"
+      >Vaciar carrito</button>
+    {{else}}
+      <p>El carrito está vacío</p>
+    {{/if}}
+  </div>
+</div>

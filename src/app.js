@@ -6,8 +6,12 @@ import cartsRoutes from './routes/carts.router.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import path from 'path'
 import viewsRouter from './routes/views.router.js'
+import { initMongoDB } from './db/database.js';
+import dotenv from "dotenv";
 
+dotenv.config(); 
 const app = express();
+
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -18,6 +22,8 @@ app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 app.set('views', path.join(process.cwd(), 'src', 'views'))
 
+//! Conexión a la base de datos en Atlas
+initMongoDB()
 
 const httpServer = app.listen(8080, () => console.log("Servidor escuchando en el puerto 8080"));
 
