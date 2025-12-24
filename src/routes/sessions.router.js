@@ -1,7 +1,11 @@
 import { Router } from 'express'
 import User from '../daos/mongodb/models/user.model.js'
 import passport from '../config/passport.js'
+import { MailService } from '../services/mail.service.js'
 import jwt from 'jsonwebtoken'
+import userModel from '../daos/mongodb/models/user.model.js'
+import crypto from 'crypto'
+import bcrypt from 'bcryptjs'
 
 const router = Router()
 
@@ -76,7 +80,7 @@ router.get('/current', (req, res, next) => {
 
     if (!user) return res.status(401).json({ error: "No autorizado" })
 
-    req.user = user;
+    req.user = user
     next();
   })(req, res, next);
 }, 
@@ -92,6 +96,82 @@ router.get('/current', (req, res, next) => {
   });
 }
 );
+
+//! Olvidé contraseña
+router.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  const user = await userModel.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: "Este email no está registrado" });
+  }
+
+  // Token plano (se envía por mail)
+  const token = crypto.randomBytes(32).toString("hex");
+
+  // Token hasheado (se guarda en DB)
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+
+  user.resetPasswordToken = hashedToken;
+  user.resetPasswordExpires = Date.now() + 60 * 60 * 1000; // 1 hora
+  await user.save();
+
+  const protocol = req.protocol;
+  const host = req.get("host");
+
+  const resetUrl = `${protocol}://${host}/reset-password?token=${token}`;
+
+  const mailService = new MailService()
+  mailService.sendForgotPasswordEmail(user.email, resetUrl);
+
+  res.json({ message: "Correo enviado" });
+})
+
+
+//! Resetear contraseña
+router.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params
+  const { newPassword, repeatNewPassword } = req.body;
+
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpires: { $gt: Date.now() }, // no expirado
+  });
+
+  if (!user) {
+    return res.status(400).json({ message: "Token inválido o expirado" });
+  }
+
+  if (newPassword !== repeatNewPassword) return res.status(400).json({message: "Las contraseñas no coinciden"})
+
+  // Evitar misma contraseña
+  const isSamePassword = await bcrypt.compare(newPassword, user.password);
+  if (isSamePassword) {
+    return res.status(400).json({
+      message: "La nueva contraseña no puede ser igual a la anterior",
+    });
+  }
+
+  // Actualizar password
+  // const salt = await bcrypt.genSalt(10);
+  user.password = newPassword;
+
+  // Invalidar token
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+
+  await user.save();
+
+  res.json({ message: "Contraseña actualizada correctamente" });
+})
 
 
 export default router;

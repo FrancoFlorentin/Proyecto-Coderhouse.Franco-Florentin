@@ -1,5 +1,4 @@
 import { cartRepository } from "../repositories/cart.repository.js";
-import { CustomError } from "../utils.js";
 
 class CartController {
   constructor(repository) {

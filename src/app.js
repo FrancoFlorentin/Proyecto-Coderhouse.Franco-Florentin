@@ -14,6 +14,7 @@ import sessionsRoutes from './routes/sessions.router.js'
 import protectedRoutes from './routes/protected.router.js'
 import productsRoutes from './routes/products.router.js';
 import cartsRoutes from './routes/carts.router.js';
+import mailsRouter from './routes/mail.router.js'
 import viewsRouter from './routes/views.router.js'
 
 import { attachUserFromCookie } from './middlewares/auth-cookie.js';
@@ -79,6 +80,7 @@ app.use('/api/sessions', sessionsRoutes)
 app.use('/private', protectedRoutes)
 app.use('/api/products', productsRoutes);
 app.use('/api/carts', cartsRoutes);
+app.use('/api/mails', mailsRouter)
 app.use('/', viewsRouter)
 
 app.use(errorHandler);
